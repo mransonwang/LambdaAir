@@ -6,7 +6,7 @@
 本应用是一个模拟查询航班报价的应用，由以下模块组成
 
 ````
-Airports                          提供机场查询服务
+Airports                          机场查询服务
 Eureka                            微服务注册
 Flights                           航班查询服务
 Presentation                      应用前端
@@ -47,7 +47,7 @@ Sales\target\sales-1.0-SNAPSHOT.jar
 Zuul\target\zuul-1.0.0-RELEASE.jar
 ````
 
-从Spring Boot 2.0.0开始，Zipkin不再作为Spring Boot可编译项目存在，官方推荐从 [官网](https://zipkin.io) 直接下载可运行的.jar文件直接运行，在Zipkin目录中，已经准备好zipkin.jar文件。
+从Spring Boot 2.0.0开始，Zipkin不再作为Spring Boot可编译项目存在，官方推荐从 [官网](https://zipkin.io) 下载可运行的.jar文件直接运行。在Zipkin目录中，已经准备好zipkin.jar文件。
 
 需要打开七个命令行窗口运行所有的微服务：
 
@@ -87,7 +87,7 @@ Zipkin                            9411
 
 # 访问应用
 
-通过 [http://localhost:6080](http://localhost:6080) 访问应用前端，在起始地址和目的地址尝试分别输入SEA和KFW，片刻后将会展现航班时间和报价，也可尝试输入其他起始地址或目的地址，比如LAS或SAN等。
+通过 [http://localhost:6080](http://localhost:6080) 访问应用前端，在起始地址和目的地址尝试分别输入SEA和DFW，片刻后将会展现航班时间和报价，也可尝试输入其他起始地址或目的地址，比如LAS或SAN等。
 
 访问 [http://localhost:8761](http://localhost:8761) 查看当前已经注册到Eureka的微服务列表。
 
@@ -132,6 +132,7 @@ pom.xml的设置非常重要，它会引入项目需要的各种依赖类库，我们使用的是Spring Cloud 
 
 引入的依赖及依赖管理：
 
+````
 	<dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -158,13 +159,13 @@ pom.xml的设置非常重要，它会引入项目需要的各种依赖类库，我们使用的是Spring Cloud 
 
 	<dependencyManagement>
 		<dependencies>
-      		<dependency>
+			<dependency>
         		<groupId>me.snowdrop</groupId>
         		<artifactId>spring-boot-bom</artifactId>
         		<version>2.1.6.SP3-redhat-00001</version>
         		<type>pom</type>
         		<scope>import</scope>
-      		</dependency>
+        	</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
@@ -174,6 +175,7 @@ pom.xml的设置非常重要，它会引入项目需要的各种依赖类库，我们使用的是Spring Cloud 
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+````
 	
 在pom.xml的末尾，添加了Red Hat的Maven仓库，这是因为项目中用到了Red Hat Spring Boot这个官方支持的类库，和纯开源的相比，红帽版本的Spring Boot不仅也是完全开源，而且更能获得官方提供的技术支持，目前它属于Red Hat Runtimes中的一员。
 
@@ -192,7 +194,7 @@ pom.xml的设置非常重要，它会引入项目需要的各种依赖类库，我们使用的是Spring Cloud 
         </pluginRepository>
     </pluginRepositories>
 
-这里需要重点提及一下，由于Spring Boot/Spring Cloud微服务在开发编译时需要依赖中央的Maven构件仓库，强烈建议在本地搭建一个私有的构件仓库，以节省每次构建时的时间，个人建议JFrog Artifactory。
+这里需要重点提及一下，由于Spring Boot/Spring Cloud微服务在开发编译时需要依赖中央的Maven构件仓库，强烈建议在本地搭建一个私有的构件仓库，以节省每次构建的时间，个人建议JFrog Artifactory。
 
 application.yaml文件位于src/main/resources目录，它的主要内容：
 
@@ -265,6 +267,4 @@ Zuul的构造和Eureka类似，作为微服务网关，是前端和后端的桥梁，实际应用中，它的功能
 
 ## 微服务之间的调用方式
 
-在本例中，所有对微服务的调用，在调用前都都通过查询Eureka获得地址信息，比如Presentation对Zuul的调用，以及微服务间通过Zuul的互相调用（尽管微服务之间可直接调用），通过restTemplate的实例进行具体的调用发送动作，而负载均衡依赖的是Ribbon，由于本例中每个微服务仅仅启用单实例，因此Ribbon的作用无法直接体现，而Zuul最后台微服务的调用也采用了简单的转发方式，目的是为了体现在一个微服务应用中，服务之间的调用方式可以是非常灵活的。
-
-
+在本例中，所有对微服务的调用，在调用前都都通过查询Eureka获得地址信息，比如Presentation对Zuul的调用，以及微服务间通过Zuul的互相调用（尽管微服务之间可直接调用）。通过restTemplate的实例进行具体的调用发送动作，而负载均衡依赖的是Ribbon，由于本例中每个微服务仅仅启用单实例，因此Ribbon的作用无法直接体现。而Zuul对后台微服务的调用也采用了简单的转发方式，目的是为了体现在一个微服务应用中，服务之间的调用方式可以是非常灵活的。
