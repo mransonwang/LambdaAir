@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: zuul
+
+server:
+  port: 6000
+
+eureka:
+  instance:
+    # 这里用服务所在的机器名注册到Eureka当中，但是如果prefer-ip-address为true，则会用IP地址注册
+    hostname: localhost
+    prefer-ip-address: true
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+
+zuul:
+  routes:
+    airports:
+      path: /airports/**
+      url: http://localhost:6010/
+    flights:
+      path: /flights/**
+      url: http://localhost:6020/
+    sales:
+      path: /sales/**
+      url: http://localhost:6030/
+
+# 经由Zuul代理的请求均使用Hystrix command包装，缺省延迟为4秒（即4000ms），这里设置为10000ms
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 10000

@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: eureka
+
+server: 
+  port: 8761
+
+eureka: 
+  instance: 
+    # 部署在OpenShift上可以把该值固定设置为localhost
+    hostname: localhost    
+  server:
+    # 每隔0秒钟响应给客户端的实例列表就过期了，下次响应的时候要重新取
+    # response-cache-auto-expiration-in-seconds: 0
+    # 每隔0.5秒钟就把响应给客户端的实例列表更新一次，设置为0时无法启动
+    response-cache-update-interval-ms: 500
+    # 每隔0.5秒钟就把注册状态为DOWN的实例清除掉，设置为0时这个线程就不工作了
+    # eviction-interval-timer-in-ms: 500
+  client: 
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      default-zone: http://${eureka.instance.hostname}:${server.port}/eureka/

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.redhat.refarch.spring.boot.lambdaair</groupId>
+    <artifactId>airports</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Lambda Air</name>
+    <description>Lambda Air Airport Information Service</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <spring-cloud.version>Greenwich.SR5</spring-cloud.version>
+
+		<spring-boot.version>2.1.6.RELEASE</spring-boot.version>
+    	<spring-boot-maven-plugin.version>2.1.6.RELEASE</spring-boot-maven-plugin.version>        
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>me.snowdrop</groupId>
+                <artifactId>spring-boot-bom</artifactId>
+                <version>2.1.6.SP3-redhat-00001</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+        </dependencies>
+    </dependencyManagement>
+
+	<dependencies>
+		<!-- Spring Boot 2.1.6 in Red Hat Runtimes支持的类库 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        
+        <!-- Spring Cloud自身类库 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+		</dependency>
+    	<dependency>
+        	<groupId>org.springframework.cloud</groupId>
+        	<artifactId>spring-cloud-starter-zipkin</artifactId>
+    	</dependency>
+    	
+    	<!-- 第三方类库 -->
+        <dependency>
+            <groupId>net.sf.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>openshift</id>
+			<!-- 该build动作必须在OCP环境下执行，正常在Eclipse中用来打包，可能会导致应用出现如下错误
+			org.apache.catalina.connector.ClientAbortException: java.io.IOException 你的主机中的软件中止了一个已建立的连接
+			 -->
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+            			<version>${spring-boot-maven-plugin.version}</version>
+            			<executions>
+                			<execution>
+                    			<goals>
+                        			<goal>repackage</goal>
+                    			</goals>
+                			</execution>
+              			</executions>
+            			<configuration>
+                			<redeploy>true</redeploy>
+            			</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+    <repositories>
+        <repository>
+            <id>redhat-ga-repository</id>
+            <name>Redhat GA Repository</name>
+            <url>https://maven.repository.redhat.com/ga/all/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>redhat-ga-repository</id>
+            <name>Redhat GA Repository</name>
+            <url>https://maven.repository.redhat.com/ga/all/</url>
+        </pluginRepository>
+    </pluginRepositories>
+	
+</project>

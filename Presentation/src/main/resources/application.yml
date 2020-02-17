@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: presentation
+  zipkin:
+    base-url: http://localhost:9411/
+  sleuth:
+    sampler:
+      percentage: 1.0
+
+server:
+  port: 6080
+
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+
+# zuul:
+#   ribbon:
+#     listOfServers: localhost:6000
+
+# 设置为2秒（2000）时偶尔会触发延时条件，想正常运行可将该值设置得更大一些，比如10秒（10000）
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 10000
+
+hystrix:
+  threadpool:
+    SalesThreads:
+      coreSize: 20
+      maxQueueSize: 200
+      queueSizeRejectionThreshold: 200
