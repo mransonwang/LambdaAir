@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Lambda Air</name>
+    <name>Airports</name>
     <description>Lambda Air Airport Information Service</description>
 
     <properties>
@@ -90,33 +90,25 @@
 		</dependency>
 	</dependencies>
 
-	<profiles>
-		<profile>
-			<id>openshift</id>
-			<!-- 该build动作必须在OCP环境下执行，正常在Eclipse中用来打包，可能会导致应用出现如下错误
-			org.apache.catalina.connector.ClientAbortException: java.io.IOException 你的主机中的软件中止了一个已建立的连接
-			 -->
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-maven-plugin</artifactId>
-            			<version>${spring-boot-maven-plugin.version}</version>
-            			<executions>
-                			<execution>
-                    			<goals>
-                        			<goal>repackage</goal>
-                    			</goals>
-                			</execution>
-              			</executions>
-            			<configuration>
-                			<redeploy>true</redeploy>
-            			</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+            	<version>${spring-boot-maven-plugin.version}</version>
+            	<executions>
+                	<execution>
+                    	<goals>
+                    		<goal>repackage</goal>
+                    	</goals>
+                	</execution>
+              	</executions>
+            	<configuration>
+                	<redeploy>true</redeploy>
+            	</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
     <repositories>
         <repository>

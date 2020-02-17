@@ -10,12 +10,12 @@ Airports                          机场查询服务
 Eureka                            微服务注册
 Flights                           航班查询服务
 Presentation                      应用前端
-Sales                             航班价格查询服务
+Sales                             票价查询服务
 Zuul                              微服务网关
 Zipkin                            微服务调用追踪
 ````
 
-应用遵照微服务应用的通用模式设计，前端通过微服务网关Zuul对后端微服务Airports、Flights、Sales进行调用，将航班信息呈现给使用者。所有微服务均注册到Eureka，后端微服务之间的调用，可通过Zuul调用，也可自行直接相互间调用。服务调用的链路追踪信息发送到Zipkin，可通过查询界面进行观察。
+遵照微服务应用的通用模式设计，前端通过微服务网关Zuul对后端微服务Airports、Flights、Sales进行调用，将航班信息呈现给用户。所有微服务均注册到Eureka，后端微服务之间的调用，可通过Zuul调用，也可自行直接相互间调用。服务调用的链路追踪信息发送到Zipkin，可通过查询界面进行观看。
 
 # 本地编译及运行
 
@@ -33,10 +33,10 @@ cd LambdaAir-master
 使用Maven进行编译打包
 
 ````
-mvn package -Popenshift
+mvn package
 ````
 
-会在以下目录生成可运行的.jar文件
+在以下目录生成可运行的.jar文件
 
 ````
 Airports\target\airports-1.0-SNAPSHOT.jar
@@ -47,7 +47,7 @@ Sales\target\sales-1.0-SNAPSHOT.jar
 Zuul\target\zuul-1.0.0-RELEASE.jar
 ````
 
-从Spring Boot 2.0.0开始，Zipkin不再作为Spring Boot可编译项目存在，官方推荐从 [官网](https://zipkin.io) 下载可运行的.jar文件直接运行。在Zipkin目录中，已经准备好zipkin.jar文件。
+从Spring Boot 2.0.0开始，Zipkin不再作为Spring Boot可编译项目存在，官方推荐从 [官网](https://zipkin.io) 下载打包好的.jar文件直接运行。在Zipkin目录中，已经准备好zipkin.jar文件。
 
 需要打开七个命令行窗口运行所有的微服务：
 
@@ -91,7 +91,7 @@ Zipkin                            9411
 
 访问 [http://localhost:8761](http://localhost:8761) 查看当前已经注册到Eureka的微服务列表。
 
-访问 [http://localhost:9411](http://localhost:9411) 查看微服务链路跟踪和各自调用依赖关系。
+访问 [http://localhost:9411](http://localhost:9411) 查看微服务链路跟踪和调用依赖关系。
 
 # 将项目导入到Eclipse
 
@@ -102,7 +102,7 @@ Zipkin                            9411
 ````
 File > Import... > Maven > Existing Maven Projects 
 ````
-Eclipse将会自动构建并编译项目，目前处于就绪状态。
+Eclipse将会自动构建并编译项目，然后处于就绪状态。
 
 鼠标右键点击任意一个项目，比如Eureka，选择主执行类：
 
@@ -134,11 +134,11 @@ pom.xml的设置非常重要，它会引入项目需要的各种依赖类库，我们使用的是Spring Cloud 
 
 ````
 	<dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
@@ -160,12 +160,12 @@ pom.xml的设置非常重要，它会引入项目需要的各种依赖类库，我们使用的是Spring Cloud 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-        		<groupId>me.snowdrop</groupId>
-        		<artifactId>spring-boot-bom</artifactId>
-        		<version>2.1.6.SP3-redhat-00001</version>
-        		<type>pom</type>
-        		<scope>import</scope>
-        	</dependency>
+				<groupId>me.snowdrop</groupId>
+				<artifactId>spring-boot-bom</artifactId>
+				<version>2.1.6.SP3-redhat-00001</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
@@ -177,7 +177,7 @@ pom.xml的设置非常重要，它会引入项目需要的各种依赖类库，我们使用的是Spring Cloud 
 	</dependencyManagement>
 ````
 	
-在pom.xml的末尾，添加了Red Hat的Maven仓库，这是因为项目中用到了Red Hat Spring Boot这个官方支持的类库，和纯开源的相比，红帽版本的Spring Boot不仅也是完全开源，而且更能获得官方提供的技术支持，目前它属于Red Hat Runtimes中的一员。
+在pom.xml的末尾，添加了Red Hat的Maven仓库，这是因为项目中用到了Red Hat Spring Boot这个官方支持的类库，和纯开源的相比，红帽版本的Spring Boot不仅也完全开源，而且更能获得官方提供的技术支持，目前它属于Red Hat Runtimes中的一员。
 
     <repositories>
         <repository>
@@ -263,8 +263,8 @@ ApplicationInitializatioin.java主要实现查询数据的加载；Controller.java对外通过RE
 
 ## Zuul
 
-Zuul的构造和Eureka类似，作为微服务网关，是前端和后端的桥梁，实际应用中，它的功能还包括流控、鉴权等更多的用处。
+Zuul的构造和Eureka类似，作为微服务网关，是前端和后端的桥梁，实际应用中，它的功能还包括流控、鉴权等。
 
 ## 微服务之间的调用方式
 
-在本例中，所有对微服务的调用，在调用前都都通过查询Eureka获得地址信息，比如Presentation对Zuul的调用，以及微服务间通过Zuul的互相调用（尽管微服务之间可直接调用）。通过restTemplate的实例进行具体的调用发送动作，而负载均衡依赖的是Ribbon，由于本例中每个微服务仅仅启用单实例，因此Ribbon的作用无法直接体现。而Zuul对后台微服务的调用也采用了简单的转发方式，目的是为了体现在一个微服务应用中，服务之间的调用方式可以是非常灵活的。
+在本例中，所有对微服务的调用，在调用前都通过查询Eureka获得地址信息，比如Presentation对Zuul的调用，以及微服务间通过Zuul的互相调用（尽管微服务之间可直接调用）。通过restTemplate的实例进行具体的调用发送动作，而负载均衡依赖的是Ribbon，由于本例中每个微服务仅仅启用单实例，因此Ribbon的作用无法直接体现。而Zuul对后台微服务的调用也采用了简单的转发方式，目的是为了体现在一个微服务应用中，服务之间的调用方式可以是非常灵活的。

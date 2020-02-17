@@ -8,7 +8,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Lambda Air</name>
+    <name>Presentation</name>
     <description>Lambda Air Reservation System Presentation Tier</description>
 
     <properties>
@@ -90,30 +90,25 @@
 		</dependency>
 	</dependencies>
 
-	<profiles>
-		<profile>
-			<id>openshift</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-maven-plugin</artifactId>
-            			<version>${spring-boot-maven-plugin.version}</version>
-            			<executions>
-                			<execution>
-                    			<goals>
-                        			<goal>repackage</goal>
-                    			</goals>
-                			</execution>
-              			</executions>
-            			<configuration>
-                			<redeploy>true</redeploy>
-            			</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+            	<version>${spring-boot-maven-plugin.version}</version>
+            	<executions>
+                	<execution>
+                    	<goals>
+                    		<goal>repackage</goal>
+                    	</goals>
+                	</execution>
+              	</executions>
+            	<configuration>
+                	<redeploy>true</redeploy>
+            	</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
     <repositories>
         <repository>
