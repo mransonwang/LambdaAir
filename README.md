@@ -15,7 +15,7 @@ Zuul                              微服务网关
 Zipkin                            微服务调用追踪
 ````
 
-遵照微服务应用的通用模式设计，前端通过微服务网关Zuul对后端微服务Airports、Flights、Sales进行调用，将航班信息呈现给用户。所有微服务均注册到Eureka，后端微服务之间的调用，可通过Zuul调用，也可自行直接相互间调用。服务调用的链路追踪信息发送到Zipkin，可通过查询界面进行观看。
+遵照微服务应用的通用模式设计，前端通过微服务网关Zuul对后端微服务Airports、Flights、Sales进行调用，将航班信息呈现给用户。所有微服务均注册到Eureka，后端微服务之间的调用，则是直接调用的方式，比如Flights对Airports的调用。服务调用的链路追踪信息发送到Zipkin，可通过查询界面进行观看。
 
 # 本地编译及运行
 
@@ -255,7 +255,7 @@ ApplicationInitializatioin.java主要实现查询数据的加载；Controller.java对外通过RE
 
 ## Flights/Sales
 
-和Airports类似，不同的是，Flights会通过Zuul调用Airports的查询服务。
+和Airports类似，不同的是，Flights会调用Airports的查询服务。
 
 ## Presentation
 
@@ -263,8 +263,8 @@ ApplicationInitializatioin.java主要实现查询数据的加载；Controller.java对外通过RE
 
 ## Zuul
 
-Zuul的构造和Eureka类似，作为微服务网关，是前端和后端的桥梁，实际应用中，它的功能还包括流控、鉴权等。
+Zuul的构造和Eureka类似，作为微服务网关，是前端和后端的桥梁，在实际应用中，它的功能还包括流控、鉴权等。
 
 ## 微服务之间的调用方式
 
-在本例中，所有对微服务的调用，在调用前都通过查询Eureka获得地址信息，比如Presentation对Zuul的调用，以及微服务间通过Zuul的互相调用（尽管微服务之间可直接调用）。通过restTemplate的实例进行具体的调用发送动作，而负载均衡依赖的是Ribbon，由于本例中每个微服务仅仅启用单实例，因此Ribbon的作用无法直接体现。而Zuul对后台微服务的调用也采用了简单的转发方式，目的是为了体现在一个微服务应用中，服务之间的调用方式可以是非常灵活的。
+在本例中，所有对微服务的调用，在调用前都通过查询Eureka获得地址信息，比如Presentation对Zuul的调用，以及后端微服务间的互相调用。通过restTemplate的实例进行具体的调用发送动作，而负载均衡依赖的是Ribbon，由于本例中每个微服务仅仅启用单实例，因此Ribbon的作用无法直接体现。而Zuul对后台微服务的调用也采用了简单的转发方式，目的是为了体现在一个微服务应用中，服务之间的调用方式可以是很灵活的。

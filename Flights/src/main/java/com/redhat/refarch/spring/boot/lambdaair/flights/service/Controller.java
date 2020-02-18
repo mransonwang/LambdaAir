@@ -56,7 +56,7 @@ public class Controller
 	{
 		tracer.currentSpan().tag( "Operation", "Look Up Flights" );
 		Map<String, Airport> airports = new HashMap<>();
-		Airport[] airportArray = restTemplate.getForObject( "http://zuul/airports/airports", Airport[].class );
+		Airport[] airportArray = restTemplate.getForObject( "http://airports/airports", Airport[].class );
 		for( Airport airport : airportArray )
 		{
 			airports.put( airport.getCode(), airport );
