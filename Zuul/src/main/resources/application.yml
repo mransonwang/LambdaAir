@@ -18,13 +18,23 @@ zuul:
   routes:
     airports:
       path: /airports/**
+      # serviceId: airports
+      # 采用直接转发的方式速度会快一些，而Zuul代理的方式速度显慢，可能有调优的地方可解决，暂不深究
       url: http://localhost:6010/
     flights:
       path: /flights/**
+      # serviceId: flights
       url: http://localhost:6020/
     sales:
       path: /sales/**
+      # serviceId: sales
       url: http://localhost:6030/
 
-# 经由Zuul代理的请求均使用Hystrix command包装，缺省延迟为4秒（即4000ms），这里设置为10000ms
-hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 10000
+# 前端页面初始化时即会调用Airports服务获得机场列表，通过Zuul代理请求时可能会导致请求超时，加大超时阈值可避免异常出现
+# 该参数设置仅适用于Zuul代理的方式，转发的方式不适用
+ribbon:
+  ReadTimeout: 60000
+
+# 经由Zuul代理的请求均使用Hystrix command包装，缺省超时阈值为4000ms，这里设置为10000ms，以避免断路器打开
+# 实际上，该值是等于ribbon.ReadTimeout在内的好几个参数加起来的值，如果设置了ribbon.ReadTimeout后，不一定需要设置该值
+# hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 10000
