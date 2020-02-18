@@ -1,9 +1,9 @@
 # 说明
-本项目演示了在本地运行基于Spring Boot/Spring Cloud架构开发的微服务应用，包含服务注册、服务发现、服务网关、链路跟踪、断路器等基础功能。Spring Boot使用Red Hat Runtimes Spring Boot 2.1.6，Spring Cloud使用Greenwich.SR5，可平滑在本地或Red Hat OpenShift上进行部署，未来，也可使用OpenShift Service Mesh对本项目使用的Spring Cloud进行相应的替代。
+本项目演示了在本地运行基于Spring Boot/Spring Cloud架构开发的微服务应用，包含服务注册、服务发现、服务网关、链路跟踪、断路器等基础功能。Spring Boot使用Red Hat Runtimes Spring Boot 2.1.6，Spring Cloud使用Greenwich.SR5，可平滑在本地或Red Hat OpenShift上进行部署，未来，也可使用Red Hat OpenShift Service Mesh对本项目的Spring Cloud进行相应的替代。
 
 # 应用说明
 
-本应用是一个模拟查询航班报价的应用，由以下模块组成
+本应用模拟查询航班报价，由以下模块组成
 
 ````
 Airports                          机场查询服务
@@ -24,7 +24,7 @@ git clone https://github.com/mransonwang/LambdaAir.git
 cd LambdaAir
 ````
 
-由于项目文件较大，也可以通过 [LambdaAir on Spring Boot](https://github.com/mransonwang/LambdaAir/archive/master.zip) 直接下载打包文件(约70M)并解压到指定目录。
+由于项目文件较大，也可以通过 [LambdaAir on Spring Boot](https://github.com/mransonwang/LambdaAir/archive/master.zip) 直接下载打包文件（约70M）并解压到指定目录。
 
 ````
 cd LambdaAir-master
@@ -35,6 +35,8 @@ cd LambdaAir-master
 ````
 mvn package
 ````
+
+编译期间需要从中央Maven库下载一系列依赖工件，如果下载速度慢，也可以通过 [Repository for LambdaAir](https://pan.baidu.com/s/1lhVUNXq7tPYCH8ImtDVTPA) 直接下载打包文件（约70M，提取码k1be）并解压到本地Maven库目录，缺省位于用户主目录下的.m2\repository。
 
 在以下目录生成可运行的.jar文件
 
@@ -194,8 +196,6 @@ pom.xml的设置非常重要，它会引入项目需要的各种依赖类库，我们使用的是Spring Cloud 
         </pluginRepository>
     </pluginRepositories>
 
-这里需要重点提及一下，由于Spring Boot/Spring Cloud微服务在开发编译时需要依赖中央的Maven构件仓库，强烈建议在本地搭建一个私有的构件仓库，以节省每次构建的时间，个人建议JFrog Artifactory。
-
 application.yaml文件位于src/main/resources目录，它的主要内容：
 
 ````
@@ -251,7 +251,7 @@ public class AirportsApplication
 
 在model包中包含了Airport.java文件，主要为数据模型类，重要的实现类在service包中。
 
-ApplicationInitializatioin.java主要实现查询数据的加载；Controller.java对外通过REST接口暴露服务，为了提供链路调用分析，在服务调用入口进行了俗称的埋点；而AirportService.java则是主要的处理逻辑所在。
+ApplicationInitialization.java主要实现查询数据的加载；Controller.java对外通过REST接口暴露服务，为了提供链路调用分析，在服务调用入口进行了俗称的埋点；而AirportsService.java则是主要的处理逻辑所在。
 
 ## Flights/Sales
 
@@ -259,7 +259,7 @@ ApplicationInitializatioin.java主要实现查询数据的加载；Controller.java对外通过RE
 
 ## Presentation
 
-是基于JQuery的一个简单应用前端，当在查询框中输入起始机场及旅行时间，它会异步的向后台发送查询请求，请求首先到Zuul，然后通过Zuul分发给相应的服务提供者。
+是基于jQuery的一个简单应用前端，页面呈现的同时即会通过Zuul向后端发送请求进行机场信息的初始化，当在查询框中输入起始机场及旅行时间，它会异步的向后台发送查询请求，请求也是首先到Zuul，然后通过Zuul分发给相应的服务提供者。
 
 ## Zuul
 
@@ -267,4 +267,4 @@ Zuul的构造和Eureka类似，作为微服务网关，是前端和后端的桥梁，在实际应用中，它的功
 
 ## 微服务之间的调用方式
 
-在本例中，所有对微服务的调用，在调用前都通过查询Eureka获得地址信息，比如Presentation对Zuul的调用，以及后端微服务间的互相调用。通过restTemplate的实例进行具体的调用发送动作，而负载均衡依赖的是Ribbon，由于本例中每个微服务仅仅启用单实例，因此Ribbon的作用无法直接体现。而Zuul对后台微服务的调用也采用了简单的转发方式，目的是为了体现在一个微服务应用中，服务之间的调用方式可以是很灵活的。
+在本例中，所有对微服务的调用，在调用前都通过查询Eureka获得地址信息，比如Presentation对Zuul的调用，以及后端微服务间的互相调用。通过restTemplate的实例进行具体的调用发送动作，而负载均衡依赖的是Ribbon，由于本例中每个微服务仅仅启用单实例，因此Ribbon的作用无法直接体现。而Zuul对后台微服务的调用也采用了简单的转发方式，目的是为了体现在一个微服务应用中，服务之间的调用方式可以是灵活多样的。
