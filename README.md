@@ -36,7 +36,7 @@ cd LambdaAir-master
 mvn package
 ````
 
-编译期间需要从中央Maven库下载一系列依赖工件，如果下载速度慢，也可以通过 [Repository for LambdaAir](https://pan.baidu.com/s/1lhVUNXq7tPYCH8ImtDVTPA) 直接下载打包文件（约70M，提取码k1be）并解压到本地Maven库目录，缺省位于用户主目录下的.m2\repository。
+编译期间需要从中央Maven库下载一系列依赖工件，如果下载速度慢，也可以通过 [Repository for LambdaAir](https://pan.baidu.com/s/1k4GvQkoIgVi-WxeyVcD5zA) 直接下载打包文件（约110M，提取码2ua8）并解压到本地Maven库目录，缺省位于用户主目录下的.m2\repository。
 
 在以下目录生成可运行的.jar文件
 
