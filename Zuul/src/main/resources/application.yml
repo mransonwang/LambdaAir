@@ -38,3 +38,9 @@ ribbon:
 # 经由Zuul代理的请求均使用Hystrix command包装，缺省超时阈值为4000ms，这里设置为10000ms，以避免断路器打开
 # 实际上，该值是等于ribbon.ReadTimeout在内的好几个参数加起来的值，如果设置了ribbon.ReadTimeout后，不一定需要设置该值
 # hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 10000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
