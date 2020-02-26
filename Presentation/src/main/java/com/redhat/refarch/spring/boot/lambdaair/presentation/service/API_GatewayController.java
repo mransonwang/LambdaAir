@@ -68,8 +68,11 @@ public class API_GatewayController
 	@RequestMapping( value = "/airportCodes", method = RequestMethod.GET )
 	public String[] airports()
 	{
+		logger.info( "[Entrying airport()......]" );
 		tracer.currentSpan().tag( "Operation", "Look Up Airport Codes" );
 		Airport[] airports = restTemplate.getForObject("http://zuul/airports/airports", Airport[].class );
+		logger.info( "[http://zuul/airports/airports REST call successfully......]" );
+		
 		String[] airportDescriptors = new String[airports.length];
 		for( int index = 0; index < airportDescriptors.length; index++ )
 		{
@@ -83,11 +86,13 @@ public class API_GatewayController
 	public List<Itinerary> query(@RequestParam( "departureDate" ) String departureDate, @RequestParam( required = false, value = "returnDate" ) String returnDate, @RequestParam( "origin" ) String origin, @RequestParam( "destination" ) String destination, HttpServletRequest request)
 	{
 		tracer.currentSpan().tag( "Operation", "Itinerary Query" );
+		/*
 		//Span querySpan = tracer.createSpan( "Itinerary Query" );
 		Span querySpan = tracer.nextSpan().name( "Itinerary Query" ).start();
 		//querySpan.setBaggageItem( "forwarded-for", request.getHeader( "x-forwarded-for" ) );
 		if ( request.getHeader( "x-forwarded-for" ) != null )
 			ExtraFieldPropagation.set( querySpan.context(), "forwarded-for", request.getHeader( "x-forwarded-for" ) );
+		*/
 		long queryTime = System.currentTimeMillis();
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://zuul" ).pathSegment( "flights", "query" );
 		builder.queryParam( "date", departureDate );
@@ -128,14 +133,16 @@ public class API_GatewayController
 		logger.info( "Returning " + pricedItineraries.size() + " flights" );
 		logger.info("Query method took " + (System.currentTimeMillis() - queryTime) + " milliseconds in total!" );
 		//tracer.close( querySpan );
-		querySpan.finish();
+		//querySpan.finish();
 		return pricedItineraries;
 	}
 
 	private @NotNull List<Itinerary> getPricing(Flight[] itineraries)
 	{
+		/*
 		//Span pricingSpan = tracer.createSpan( "Itinerary Pricing" );
 		Span pricingSpan = tracer.nextSpan().name( "Itinerary Pricing" ).start();
+		*/
 		long pricingTime = System.currentTimeMillis();
 		List<Itinerary> pricedItineraries = new ArrayList<>();
 		for( int index = 0; index < itineraries.length; )
@@ -161,7 +168,7 @@ public class API_GatewayController
 		}
 		logger.info("It took " + (System.currentTimeMillis() - pricingTime) + " milliseconds to price "  + itineraries.length + " tickets");
 		//tracer.close( pricingSpan );
-		pricingSpan.finish();
+		//pricingSpan.finish();
 		return pricedItineraries;
 	}
 

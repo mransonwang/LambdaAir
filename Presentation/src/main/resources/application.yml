@@ -5,7 +5,7 @@ spring:
     base-url: http://localhost:9411/
   sleuth:
     sampler:
-      percentage: 1.0
+      probability: 1.0
 
 server:
   port: 6080
@@ -22,8 +22,8 @@ eureka:
 #   ribbon:
 #     listOfServers: localhost:6000
 
-# 设置为2秒（2000）时偶尔会触发延时条件，想正常运行可将该值设置得更大一些，比如10秒（10000）
-hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 10000
+# 设置为2秒（2000）时偶尔会触发延时条件，想正常运行可将该值设置得更大一些，比如90秒（90000）
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 90000
 
 hystrix:
   threadpool:
