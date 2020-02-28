@@ -38,7 +38,7 @@ mvn package
 
 编译期间需要从中央Maven库下载一系列依赖工件，如果下载速度慢，也可以通过 [Repository for LambdaAir](https://pan.baidu.com/s/1k4GvQkoIgVi-WxeyVcD5zA) 直接下载打包文件（约110M，提取码2ua8）并解压到本地Maven库目录，缺省位于用户主目录下的.m2\repository。
 
-在以下目录生成可运行的.jar文件
+在以下目录生成了可运行的.jar文件
 
 ````
 Airports\target\airports-1.0-SNAPSHOT.jar
@@ -251,7 +251,7 @@ public class AirportsApplication
 
 在model包中包含了Airport.java文件，主要为数据模型类，重要的实现类在service包中。
 
-ApplicationInitialization.java主要实现查询数据的加载；Controller.java对外通过REST接口暴露服务，为了提供链路调用分析，在服务调用入口进行了俗称的埋点；而AirportsService.java则是主要的处理逻辑所在。
+ApplicationInitialization.java主要实现查询数据的加载；Controller.java对外通过REST接口暴露服务，为了提供链路调用分析，在服务调用入口打上了Tag；而AirportsService.java则是主要的处理逻辑所在。
 
 ## Flights/Sales
 
@@ -267,4 +267,4 @@ Zuul的构造和Eureka类似，作为微服务网关，是前端和后端的桥梁，在实际应用中，它的功
 
 ## 微服务之间的调用方式
 
-在本例中，所有对微服务的调用，在调用前都通过查询Eureka获得地址信息，比如Presentation对Zuul的调用，以及后端微服务间的互相调用。通过restTemplate的实例进行具体的调用发送动作，而负载均衡依赖的是Ribbon，由于本例中每个微服务仅仅启用单实例，因此Ribbon的作用无法直接体现。而Zuul对后台微服务的调用也采用了简单的转发方式，目的是为了体现在一个微服务应用中，服务之间的调用方式可以是灵活多样的。
+在本例中，所有对微服务的调用，在调用前都通过查询Eureka获得地址信息，比如Presentation对Zuul的调用，以及后端微服务间的互相调用。通过restTemplate的实例进行具体的调用发送动作，而负载均衡依赖的是Ribbon，由于本例中每个微服务仅仅启用单实例，因此Ribbon的作用无法直接体现。Zuul对后台微服务的调用也采用了从Eureka获得地址信息，并通过Ribbon进行负载均衡的方式，这是典型的微服务应用架构。
